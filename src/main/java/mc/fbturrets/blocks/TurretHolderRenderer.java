@@ -23,7 +23,7 @@ public class TurretHolderRenderer extends BlockEntityRenderer<TurretHolderBlockE
 
         matrices.translate(0.5, 0, 0.5);
 
-        matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(entity.yaw));
+        matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(entity.yaw + 180));
 
         MinecraftClient.getInstance().getBlockRenderManager().renderBlock(
                 FBTurrets.TURRET_HOLDER_MODEL.getDefaultState(),
@@ -35,7 +35,7 @@ public class TurretHolderRenderer extends BlockEntityRenderer<TurretHolderBlockE
                 new Random());
 
         matrices.translate(-0.5, 0.65, 0);
-        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(entity.pitch + 180));
+        matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-entity.pitch));
 
         MinecraftClient.getInstance().getBlockRenderManager().renderBlockAsEntity(
                 entity.gun.getDefaultState(),

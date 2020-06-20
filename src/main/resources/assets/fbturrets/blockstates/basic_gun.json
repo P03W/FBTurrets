@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "fbturrets:block/basic_gun" }
+  }
+}

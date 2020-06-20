@@ -27,4 +27,11 @@ public class MathHelp {
 
         return start + delta * f;
     }
+
+    public static float facingDiffrence(float pitch, float yaw, float target_pitch, float target_yaw) {
+        float result = 0;
+        result += (target_pitch - pitch);
+        result += (target_yaw - yaw);
+        return (float)Math.sqrt(Math.abs(result));
+    }
 }

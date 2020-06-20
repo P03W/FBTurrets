@@ -10,7 +10,6 @@ import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegi
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.client.render.RenderLayer;
-import net.minecraft.particle.ParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -53,7 +52,7 @@ public class FBTurretsClient implements ClientModInitializer {
                                     VectorIterator vecIter = new VectorIterator(target, 0.5);
                                     Vec3d turretVec3d = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.65, pos.getZ() + 0.5);
                                     for (Vec3d vec3d : vecIter) {
-                                        world.addParticle(ParticleTypes.CRIT, true, turretVec3d.x + vec3d.x, turretVec3d.y + vec3d.y, turretVec3d.z + vec3d.z, 0, 0.12, 0);
+                                        world.addParticle(((TurretHolderBlockEntity)blockEntity).gun.getEffect(), true, turretVec3d.x + vec3d.x, turretVec3d.y + vec3d.y, turretVec3d.z + vec3d.z, 0, 0.12, 0);
                                     }
                                 }
                             }

@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "fbturrets:block/debug_turret"
+    "all": "fbturrets:block/turret_holder"
   }
 }
