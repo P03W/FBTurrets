@@ -10,6 +10,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.Objects;
+
 public class GunItem extends Item {
     private final Identifier ID;
     
@@ -23,7 +25,10 @@ public class GunItem extends Item {
         BlockEntity be = context.getWorld().getBlockEntity(context.getBlockPos());
         if (be != null && be.getType() == FBTurrets.TURRET_HOLDER_BLOCK_ENTITY) {
             if (((TurretHolderBlockEntity)be).gun.getID() != ID) {
-                ((TurretHolderBlockEntity)be).dropGun();
+                if (!Objects.requireNonNull(context.getPlayer()).isCreative()) {
+                    ((TurretHolderBlockEntity)be).dropGun();
+                    context.getPlayer().getMainHandStack().decrement(1);
+                }
                 ((TurretHolderBlockEntity)be).gun = (TurretGun)Registry.BLOCK.get(ID);
             }
             return ActionResult.SUCCESS;
