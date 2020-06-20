@@ -1,6 +1,7 @@
 package mc.fbturrets.blocks;
 
 import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Box;
 
 public interface ITurretGun {
@@ -9,4 +10,5 @@ public interface ITurretGun {
     int getDamage();
     DefaultParticleType getEffect();
     Box getTargetBox();
+    Identifier getID();
 }

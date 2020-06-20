@@ -3,6 +3,7 @@ package mc.fbturrets.main;
 import mc.fbturrets.blocks.TurretGun;
 import mc.fbturrets.blocks.TurretHolder;
 import mc.fbturrets.blocks.TurretHolderBlockEntity;
+import mc.fbturrets.item.GunItem;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
@@ -44,8 +45,10 @@ public class FBTurrets implements ModInitializer {
 	}
 
 	private TurretGun registerTurretGun(String ident, double aimSpeed, int aimTime, DefaultParticleType effect, int damage, Box box) {
-		TurretGun block = new TurretGun(aimTime, aimSpeed, damage, effect, box, FabricBlockSettings.of(Material.METAL).hardness(4.0f).nonOpaque());
-		Registry.register(Registry.BLOCK, new Identifier(MOD_ID, ident), block);
+		Identifier id =new Identifier(MOD_ID, ident);
+		TurretGun block = new TurretGun(aimTime, aimSpeed, damage, effect, box, id, FabricBlockSettings.of(Material.METAL).hardness(4.0f).nonOpaque());
+		Registry.register(Registry.BLOCK, id, block);
+		Registry.register(Registry.ITEM, id, new GunItem(id, new Item.Settings().group(ItemGroup.MISC)));
 		return block;
 	}
 }

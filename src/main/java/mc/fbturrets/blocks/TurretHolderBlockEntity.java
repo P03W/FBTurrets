@@ -8,16 +8,19 @@ import net.fabricmc.fabric.api.server.PlayerStream;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.mob.Monster;
 import net.minecraft.entity.passive.PigEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.util.Tickable;
 import net.minecraft.util.hit.HitResult;
 import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.RayTraceContext;
 
 import java.util.List;
@@ -136,5 +139,12 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
             return result == HitResult.Type.BLOCK;
         }
         return true;
+    }
+    
+    public void dropGun() {
+        ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, new ItemStack(Registry.ITEM.get(gun.getID())));
+        assert world != null;
+        world.spawnEntity(itemEntity);
+        System.out.println(itemEntity);
     }
 }
