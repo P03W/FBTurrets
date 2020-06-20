@@ -144,7 +144,7 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
     public void dropGun() {
         ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, new ItemStack(Registry.ITEM.get(gun.getID())));
         assert world != null;
+        itemEntity.setVelocity(0, 0, 0);
         world.spawnEntity(itemEntity);
-        System.out.println(itemEntity);
     }
 }
