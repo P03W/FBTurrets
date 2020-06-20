@@ -37,13 +37,15 @@ public class TurretHolderRenderer extends BlockEntityRenderer<TurretHolderBlockE
         matrices.translate(-0.5, 0.65, 0);
         matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(-entity.pitch));
 
-        MinecraftClient.getInstance().getBlockRenderManager().renderBlockAsEntity(
+        if (entity.gun != null) {
+            MinecraftClient.getInstance().getBlockRenderManager().renderBlockAsEntity(
                 entity.gun.getDefaultState(),
                 matrices,
                 vertexConsumers,
                 light,
                 OverlayTexture.DEFAULT_UV
-                );
+            );
+        }
 
         matrices.pop();
     }

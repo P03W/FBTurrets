@@ -1,4 +1,4 @@
-package mc.fbturrets.math;
+package mc.fbturrets.util;
 
 import net.minecraft.util.math.Vec3d;
 

@@ -24,13 +24,14 @@ public class GunItem extends Item {
     public ActionResult useOnBlock(ItemUsageContext context) {
         BlockEntity be = context.getWorld().getBlockEntity(context.getBlockPos());
         if (be != null && be.getType() == FBTurrets.TURRET_HOLDER_BLOCK_ENTITY) {
-            if (((TurretHolderBlockEntity)be).gun.getID() != ID) {
+            TurretGun gun = ((TurretHolderBlockEntity)be).gun;
+            if (gun != null && gun.getID() != ID) {
                 if (!Objects.requireNonNull(context.getPlayer()).isCreative()) {
                     ((TurretHolderBlockEntity)be).dropGun();
                     context.getPlayer().getMainHandStack().decrement(1);
                 }
-                ((TurretHolderBlockEntity)be).gun = (TurretGun)Registry.BLOCK.get(ID);
             }
+            ((TurretHolderBlockEntity)be).gun = (TurretGun) Registry.BLOCK.get(ID);
             return ActionResult.SUCCESS;
         }
         return ActionResult.CONSUME;

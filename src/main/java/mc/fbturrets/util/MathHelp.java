@@ -1,4 +1,4 @@
-package mc.fbturrets.math;
+package mc.fbturrets.util;
 
 import net.minecraft.util.math.Vec3d;
 
@@ -33,5 +33,9 @@ public class MathHelp {
         result += (target_pitch - pitch);
         result += (target_yaw - yaw);
         return (float)Math.sqrt(Math.abs(result));
+    }
+    
+    public static double absDist(float a, float b) {
+        return Math.abs(b - a);
     }
 }

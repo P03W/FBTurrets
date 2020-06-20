@@ -23,6 +23,7 @@ public class FBTurrets implements ModInitializer {
 
 	public static final Identifier TURRET_ANGLES_UPDATE = new Identifier(MOD_ID, "turret_angles");
 	public static final Identifier TURRET_SHOOT_PARTICLES = new Identifier(MOD_ID, "turret_shoot");
+	public static final Identifier TURRET_GUN_UPDATE = new Identifier(MOD_ID, "turret_update");
 
 	public static Block TURRET_HOLDER_MODEL;
 	public static TurretGun BASIC_GUN;
