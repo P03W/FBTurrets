@@ -54,7 +54,7 @@ public class FBTurretsClient implements ClientModInitializer {
                             VectorIterator vecIter = new VectorIterator(target, 0.5);
                             Vec3d turretVec3d = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.65, pos.getZ() + 0.5);
                             for (Vec3d vec3d : vecIter) {
-                                world.addParticle(((TurretHolderBlockEntity)blockEntity).gun.getEffect(), true, turretVec3d.x + vec3d.x, turretVec3d.y + vec3d.y, turretVec3d.z + vec3d.z, 0, 0.12, 0);
+                                world.addParticle(((TurretHolderBlockEntity)blockEntity).gun.getEffect(), true, turretVec3d.x + vec3d.x, turretVec3d.y + vec3d.y, turretVec3d.z + vec3d.z, 0, 0, 0);
                             }
                         }
                     }
