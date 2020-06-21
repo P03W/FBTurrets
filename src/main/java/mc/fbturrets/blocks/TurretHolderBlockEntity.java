@@ -50,7 +50,7 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
         if (gun != null) {
             Box targetBox = gun.getTargetBox();
             if (!world.isClient && gun != null) {
-    
+                
                 tickCount++;
                 
                 if (tickCount % 20 == 0) {
@@ -63,17 +63,17 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
                 }
                 
                 turretVec3d = new Vec3d(pos.getX() + 0.5, pos.getY() + 0.65, pos.getZ() + 0.5);
-        
+                
                 List<Entity> targets = world.getEntities(null, targetBox.offset(pos));
-        
+                
                 if (!targets.contains(target)) {
                     target = null;
                 }
-        
+                
                 if (!targets.isEmpty()) {
-            
+                    
                     targets.removeIf(this::cantBeAttacked);
-            
+                    
                     for (Entity possible : targets) {
                         if (target == null) {
                             target = possible;
@@ -84,16 +84,14 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
                 }
                 
                 if (target != null && !target.removed && target.isAlive()) {
-                    Vec3d targetPos = new Vec3d(target.getX(), (target.getPos().y + target.getBoundingBox().getYLength() / 2), target.getZ());
-            
                     double d = target.getX() - turretVec3d.x;
                     double e = (target.getY() + target.getBoundingBox().getYLength() / 2) - turretVec3d.y;
                     double f = target.getZ() - turretVec3d.z;
                     double g = MathHelper.sqrt(d * d + f * f);
-            
-                    float target_pitch = MathHelper.wrapDegrees((float) (-(MathHelper.atan2(e, g) * 57.2957763671875D)));
-                    float target_yaw = MathHelper.wrapDegrees((float) (MathHelper.atan2(f, d) * 57.2957763671875D) - 90.0F);
-            
+                    
+                    float target_pitch = MathHelper.wrapDegrees((float)(-(MathHelper.atan2(e, g) * 57.2957763671875D)));
+                    float target_yaw = MathHelper.wrapDegrees((float)(MathHelper.atan2(f, d) * 57.2957763671875D) - 90.0F);
+                    
                     float last_pitch = pitch;
                     float last_yaw = yaw;
                     
@@ -110,13 +108,13 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
                     }
                     
                     if (MathHelp.facingDiffrence(pitch, MathHelper.wrapDegrees(yaw), target_pitch, target_yaw) < 3) {
-                
+                        
                         currentAimTime++;
                         
                         if (currentAimTime >= gun.getAimTime() && !cantBeAttacked(target)) {
                             currentAimTime = 0;
                             target.damage(DamageSource.GENERIC, gun.getDamage());
-                    
+                            
                             Stream<PlayerEntity> newWatchingPlayers = PlayerStream.watching(world, pos);
                             PacketByteBuf newPassedData = new PacketByteBuf(Unpooled.buffer());
                             newPassedData.writeBlockPos(pos);
@@ -162,7 +160,7 @@ public class TurretHolderBlockEntity extends BlockEntity implements Tickable {
         if (gun != null) {
             ItemEntity itemEntity = new ItemEntity(world, pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5, new ItemStack(Registry.ITEM.get(gun.getID())));
             assert world != null;
-            itemEntity.setVelocity(0, 0.15, 0);
+            itemEntity.setVelocity(MathHelp.smallRandom(), 0.15, MathHelp.smallRandom());
             world.spawnEntity(itemEntity);
         }
     }

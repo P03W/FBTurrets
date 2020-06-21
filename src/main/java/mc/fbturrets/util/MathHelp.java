@@ -1,6 +1,9 @@
 package mc.fbturrets.util;
 
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.Random;
 
 public class MathHelp {
     public static Vec3d getDirectionVector(double pitch, double yaw) {
@@ -37,5 +40,14 @@ public class MathHelp {
     
     public static double absDist(float a, float b) {
         return Math.abs(b - a);
+    }
+    
+    public static Box buildSimpleBox(int side) {
+        return new Box(side, side, side, -side, -side, -side);
+    }
+    
+    public static double smallRandom() {
+        Random random = new Random();
+        return random.nextBoolean() ? random.nextDouble() / 5 : -random.nextDouble() / 5;
     }
 }

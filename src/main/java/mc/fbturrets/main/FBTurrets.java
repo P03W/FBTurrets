@@ -4,6 +4,7 @@ import mc.fbturrets.blocks.TurretGun;
 import mc.fbturrets.blocks.TurretHolder;
 import mc.fbturrets.blocks.TurretHolderBlockEntity;
 import mc.fbturrets.item.GunItem;
+import mc.fbturrets.util.MathHelp;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.client.itemgroup.FabricItemGroupBuilder;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
@@ -45,9 +46,9 @@ public class FBTurrets implements ModInitializer {
 		TURRET_HOLDER_BLOCK_ENTITY = Registry.register(Registry.BLOCK_ENTITY_TYPE, MOD_ID + ":turret_holder", BlockEntityType.Builder.create(TurretHolderBlockEntity::new, TURRET_HOLDER).build(null));
 		Registry.register(Registry.ITEM, new Identifier(MOD_ID, "turret_holder"), new BlockItem(TURRET_HOLDER, new Item.Settings().group(ITEM_GROUP)));
 		
-		BASIC_GUN = registerTurretGun("basic_gun", 0.3, 20, ParticleTypes.CRIT, 5, new Box(15, 5, 15, -15, -5, -15));
-		SNIPER_GUN = registerTurretGun("sniper_gun", 0.2, 35, ParticleTypes.ENCHANTED_HIT, 15, new Box(32, 15, 32, -32, -15, -32));
-		AUTO_GUN = registerTurretGun("auto_gun", 0.35, 10, ParticleTypes.CLOUD, 2, new Box(10, 5, 10, -10, -5, -10));
+		BASIC_GUN = registerTurretGun("basic_gun", 0.3, 20, ParticleTypes.CRIT, 5, MathHelp.buildSimpleBox(15));
+		SNIPER_GUN = registerTurretGun("sniper_gun", 0.2, 35, ParticleTypes.ENCHANTED_HIT, 15, MathHelp.buildSimpleBox(32));
+		AUTO_GUN = registerTurretGun("auto_gun", 0.35, 11, ParticleTypes.CLOUD, 3, MathHelp.buildSimpleBox(10));
 	}
 
 	private TurretGun registerTurretGun(String ident, double aimSpeed, int aimTime, DefaultParticleType effect, int damage, Box box) {
