@@ -16,7 +16,7 @@ class GunItem(private val ID: Identifier, settings: Settings?) : Item(settings) 
         if (be != null && be.type === FBTurrets.TURRET_HOLDER_BLOCK_ENTITY) {
             val gun = (be as TurretHolderBlockEntity).gun
             if (gun != null && gun.iD !== ID) {
-                if (!Objects.requireNonNull(context.player)!!.isCreative) {
+                if (!context.player!!.isCreative) {
                     be.dropGun()
                     context.player!!.mainHandStack.decrement(1)
                 }

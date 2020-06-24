@@ -3,7 +3,7 @@ package mc.fbturrets.blocks
 import io.netty.buffer.Unpooled
 import mc.fbturrets.main.FBTurrets
 import mc.fbturrets.util.MathHelp.absDist
-import mc.fbturrets.util.MathHelp.facingDiffrence
+import mc.fbturrets.util.MathHelp.facingDifference
 import mc.fbturrets.util.MathHelp.lerpAngle
 import mc.fbturrets.util.MathHelp.smallRandom
 import net.fabricmc.fabric.api.network.ServerSidePacketRegistry
@@ -40,8 +40,7 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
     var gun: TurretGun? = null
     private var target: Entity? = null
     override fun tick() {
-        assert(world != null)
-        if (gun != null) {
+        if (gun != null && world != null) {
             val targetBox = gun!!.targetBox
             if (!world!!.isClient && gun != null) {
                 tickCount++
@@ -87,7 +86,7 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
                         passedData.writeFloat(yaw)
                         watchingPlayers.forEach { player: PlayerEntity? -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, FBTurrets.TURRET_ANGLES_UPDATE, passedData) }
                     }
-                    if (facingDiffrence(pitch, MathHelper.wrapDegrees(yaw), targetPitch, targetYaw) < 3) {
+                    if (facingDifference(pitch, MathHelper.wrapDegrees(yaw), targetPitch, targetYaw) < 3) {
                         currentAimTime++
                         if (currentAimTime >= gun!!.aimTime && !cantBeAttacked(target)) {
                             currentAimTime = 0
@@ -115,8 +114,7 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
     }
 
     private fun cantBeAttacked(target: Entity?): Boolean {
-        assert(world != null)
-        if (target != null) {
+        if (target != null && world != null) {
             if (!target.isAlive) {
                 return true
             }

@@ -9,16 +9,6 @@ import kotlin.math.sin
 import kotlin.math.sqrt
 
 object MathHelp {
-    fun getDirectionVector(pitch: Double, yaw: Double): Vec3d {
-        val pitchRadians = Math.toRadians(pitch)
-        val yawRadians = Math.toRadians(yaw)
-        val sinPitch = sin(pitchRadians)
-        val cosPitch = cos(pitchRadians)
-        val sinYaw = sin(yawRadians)
-        val cosYaw = cos(yawRadians)
-        return Vec3d(-cosPitch * sinYaw, sinPitch, -cosPitch * cosYaw)
-    }
-
     @JvmStatic
     fun lerpAngle(start: Float, end: Float, delta: Float): Float {
         var f = end - start
@@ -32,7 +22,7 @@ object MathHelp {
     }
 
     @JvmStatic
-    fun facingDiffrence(pitch: Float, yaw: Float, target_pitch: Float, target_yaw: Float): Float {
+    fun facingDifference(pitch: Float, yaw: Float, target_pitch: Float, target_yaw: Float): Float {
         var result = 0f
         result += target_pitch - pitch
         result += target_yaw - yaw

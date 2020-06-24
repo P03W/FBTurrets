@@ -50,13 +50,14 @@ class FBTurretsClient : ClientModInitializer {
                 val world = packetContext.player.world
                 val blockEntity = world.getBlockEntity(pos)
                 if (blockEntity is TurretHolderBlockEntity) {
-                    if (blockEntity.gun != null) {
+                    val gun = blockEntity.gun
+                    if (gun != null) {
                         val vecIter = VectorIterator(target, 0.5)
                         val turretVec3d = Vec3d(pos.x + 0.5, pos.y + 0.65, pos.z + 0.5)
                         for (vec3d in vecIter) {
                             if (vec3d != null) {
                                 world.addParticle(
-                                    blockEntity.gun!!.effect,
+                                    gun.effect,
                                     true,
                                     turretVec3d.x + vec3d.x,
                                     turretVec3d.y + vec3d.y,
