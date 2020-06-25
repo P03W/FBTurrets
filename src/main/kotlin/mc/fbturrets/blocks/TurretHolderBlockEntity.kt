@@ -24,7 +24,6 @@ import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
 import net.minecraft.screen.NamedScreenHandlerFactory
 import net.minecraft.screen.ScreenHandler
-import net.minecraft.text.LiteralText
 import net.minecraft.text.Text
 import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
@@ -36,9 +35,7 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.RayTraceContext
 
-class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY), Tickable, ImplementedInventory,
-    NamedScreenHandlerFactory {
-    private var inventory = DefaultedList.ofSize(4, ItemStack.EMPTY)
+class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY), Tickable {
     private var currentAimTime = 0
     private var turretVec3d: Vec3d? = null
     private var tickCount = 0
@@ -185,7 +182,6 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
         } else {
             tag.putString("gunID", "")
         }
-        Inventories.toTag(tag, items);
         return super.toTag(tag)
     }
 
@@ -194,23 +190,6 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
         if (id.isNotEmpty()) {
             gun = Registry.BLOCK[Identifier(id)] as TurretGun
         }
-        Inventories.fromTag(tag,items);
         super.fromTag(state, tag)
-    }
-
-    override fun getItems(): DefaultedList<ItemStack> {
-        return inventory
-    }
-
-    override fun markDirty() {
-        super<BlockEntity>.markDirty()
-    }
-
-    override fun createMenu(syncId: Int, inv: PlayerInventory?, player: PlayerEntity?): ScreenHandler? {
-        TODO("Not yet implemented")
-    }
-
-    override fun getDisplayName(): Text {
-        return TranslatableText(cachedState.block.translationKey)
     }
 }
