@@ -3,10 +3,12 @@ package mc.fbturrets.main
 import mc.fbturrets.blocks.TurretGun
 import mc.fbturrets.blocks.TurretHolderBlockEntity
 import mc.fbturrets.blocks.TurretHolderRenderer
+import mc.fbturrets.blocks.gui.TurretHolderScreen
 import mc.fbturrets.util.VectorIterator
 import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap
 import net.fabricmc.fabric.api.client.rendereregistry.v1.BlockEntityRendererRegistry
+import net.fabricmc.fabric.api.client.screenhandler.v1.ScreenRegistry
 import net.fabricmc.fabric.api.network.ClientSidePacketRegistry
 import net.fabricmc.fabric.api.network.PacketContext
 import net.minecraft.client.render.RenderLayer
@@ -85,5 +87,7 @@ class FBTurretsClient : ClientModInitializer {
                 }
             }
         }
+
+        ScreenRegistry.register(FBTurrets.TURRET_HOLDER_SCREEN_TYPE) { gui, inventory, title-> TurretHolderScreen(gui, inventory, title) }
     }
 }

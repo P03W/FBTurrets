@@ -17,10 +17,16 @@ import net.minecraft.entity.damage.DamageSource
 import net.minecraft.entity.mob.Monster
 import net.minecraft.entity.passive.PigEntity
 import net.minecraft.entity.player.PlayerEntity
-import net.minecraft.inventory.Inventory
+import net.minecraft.entity.player.PlayerInventory
+import net.minecraft.inventory.Inventories
 import net.minecraft.item.ItemStack
 import net.minecraft.nbt.CompoundTag
 import net.minecraft.network.PacketByteBuf
+import net.minecraft.screen.NamedScreenHandlerFactory
+import net.minecraft.screen.ScreenHandler
+import net.minecraft.text.LiteralText
+import net.minecraft.text.Text
+import net.minecraft.text.TranslatableText
 import net.minecraft.util.Identifier
 import net.minecraft.util.Tickable
 import net.minecraft.util.collection.DefaultedList
@@ -30,15 +36,19 @@ import net.minecraft.util.math.Vec3d
 import net.minecraft.util.registry.Registry
 import net.minecraft.world.RayTraceContext
 
-class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY), Tickable, Inventory {
+class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY), Tickable, ImplementedInventory,
+    NamedScreenHandlerFactory {
     private var inventory = DefaultedList.ofSize(4, ItemStack.EMPTY)
     private var currentAimTime = 0
     private var turretVec3d: Vec3d? = null
     private var tickCount = 0
+
     @JvmField
     var yaw = 0f
+
     @JvmField
     var pitch = 0f
+
     @JvmField
     var gun: TurretGun? = null
     private var target: Entity? = null
@@ -53,7 +63,13 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
                     val gunPassedData = PacketByteBuf(Unpooled.buffer())
                     gunPassedData.writeBlockPos(pos)
                     gunPassedData.writeString(gun!!.iD.toString())
-                    playersAround.forEach { player: PlayerEntity? -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, FBTurrets.TURRET_GUN_UPDATE, gunPassedData) }
+                    playersAround.forEach { player: PlayerEntity? ->
+                        ServerSidePacketRegistry.INSTANCE.sendToPlayer(
+                            player,
+                            FBTurrets.TURRET_GUN_UPDATE,
+                            gunPassedData
+                        )
+                    }
                 }
                 turretVec3d = Vec3d(pos.x + 0.5, pos.y + 0.65, pos.z + 0.5)
                 val targets = world!!.getEntities(null, targetBox.offset(pos))
@@ -76,7 +92,8 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
                     val f = target!!.z - turretVec3d!!.z
                     val g = MathHelper.sqrt(d * d + f * f).toDouble()
                     val targetPitch = MathHelper.wrapDegrees((-(MathHelper.atan2(e, g) * 57.2957763671875)).toFloat())
-                    val targetYaw = MathHelper.wrapDegrees((MathHelper.atan2(f, d) * 57.2957763671875).toFloat() - 90.0f)
+                    val targetYaw =
+                        MathHelper.wrapDegrees((MathHelper.atan2(f, d) * 57.2957763671875).toFloat() - 90.0f)
                     val lastPitch = pitch
                     val lastYaw = yaw
                     pitch = lerpAngle(pitch, targetPitch, 0.1f)
@@ -87,7 +104,13 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
                         passedData.writeBlockPos(pos)
                         passedData.writeFloat(pitch)
                         passedData.writeFloat(yaw)
-                        watchingPlayers.forEach { player: PlayerEntity? -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, FBTurrets.TURRET_ANGLES_UPDATE, passedData) }
+                        watchingPlayers.forEach { player: PlayerEntity? ->
+                            ServerSidePacketRegistry.INSTANCE.sendToPlayer(
+                                player,
+                                FBTurrets.TURRET_ANGLES_UPDATE,
+                                passedData
+                            )
+                        }
                     }
                     if (facingDifference(pitch, MathHelper.wrapDegrees(yaw), targetPitch, targetYaw) < 3) {
                         currentAimTime++
@@ -100,7 +123,13 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
                             newPassedData.writeDouble(d)
                             newPassedData.writeDouble(e)
                             newPassedData.writeDouble(f)
-                            newWatchingPlayers.forEach { player: PlayerEntity? -> ServerSidePacketRegistry.INSTANCE.sendToPlayer(player, FBTurrets.TURRET_SHOOT_PARTICLES, newPassedData) }
+                            newWatchingPlayers.forEach { player: PlayerEntity? ->
+                                ServerSidePacketRegistry.INSTANCE.sendToPlayer(
+                                    player,
+                                    FBTurrets.TURRET_SHOOT_PARTICLES,
+                                    newPassedData
+                                )
+                            }
                         } else {
                             if (currentAimTime >= gun!!.aimTime) {
                                 target = null
@@ -126,7 +155,15 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
             }
             val targetPos = Vec3d(target.x, target.pos.y + target.boundingBox.yLength / 2, target.z)
             val dir = targetPos.subtract(turretVec3d).normalize()
-            val result = world!!.rayTrace(RayTraceContext(turretVec3d!!.add(dir.multiply(1.2)), targetPos, RayTraceContext.ShapeType.COLLIDER, RayTraceContext.FluidHandling.ANY, PigEntity(EntityType.PIG, world))).type
+            val result = world!!.rayTrace(
+                RayTraceContext(
+                    turretVec3d!!.add(dir.multiply(1.2)),
+                    targetPos,
+                    RayTraceContext.ShapeType.COLLIDER,
+                    RayTraceContext.FluidHandling.ANY,
+                    PigEntity(EntityType.PIG, world)
+                )
+            ).type
             return result == HitResult.Type.BLOCK
         }
         return true
@@ -134,7 +171,8 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
 
     fun dropGun() {
         if (gun != null) {
-            val itemEntity = ItemEntity(world, pos.x + 0.5, (pos.y + 1).toDouble(), pos.z + 0.5, ItemStack(Registry.ITEM[gun!!.iD]))
+            val itemEntity =
+                ItemEntity(world, pos.x + 0.5, (pos.y + 1).toDouble(), pos.z + 0.5, ItemStack(Registry.ITEM[gun!!.iD]))
             assert(world != null)
             itemEntity.setVelocity(smallRandom(), 0.15, smallRandom())
             world!!.spawnEntity(itemEntity)
@@ -147,6 +185,7 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
         } else {
             tag.putString("gunID", "")
         }
+        Inventories.toTag(tag, items);
         return super.toTag(tag)
     }
 
@@ -155,39 +194,23 @@ class TurretHolderBlockEntity : BlockEntity(FBTurrets.TURRET_HOLDER_BLOCK_ENTITY
         if (id.isNotEmpty()) {
             gun = Registry.BLOCK[Identifier(id)] as TurretGun
         }
+        Inventories.fromTag(tag,items);
         super.fromTag(state, tag)
     }
 
-    override fun clear() {
-        inventory.clear()
+    override fun getItems(): DefaultedList<ItemStack> {
+        return inventory
     }
 
-    override fun setStack(slot: Int, stack: ItemStack?) {
-        inventory[slot] = stack
+    override fun markDirty() {
+        super<BlockEntity>.markDirty()
     }
 
-    override fun isEmpty(): Boolean {
-        return inventory.isEmpty()
+    override fun createMenu(syncId: Int, inv: PlayerInventory?, player: PlayerEntity?): ScreenHandler? {
+        TODO("Not yet implemented")
     }
 
-    override fun removeStack(slot: Int, amount: Int): ItemStack {
-        inventory[slot].decrement(amount)
-        return inventory[slot]
-    }
-
-    override fun removeStack(slot: Int): ItemStack {
-        return inventory.removeAt(slot)
-    }
-
-    override fun getStack(slot: Int): ItemStack {
-        return inventory[slot]
-    }
-
-    override fun canPlayerUse(player: PlayerEntity?): Boolean {
-        return true
-    }
-
-    override fun size(): Int {
-        return inventory.size
+    override fun getDisplayName(): Text {
+        return TranslatableText(cachedState.block.translationKey)
     }
 }
