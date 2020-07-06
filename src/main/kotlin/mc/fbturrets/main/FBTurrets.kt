@@ -4,7 +4,7 @@ import mc.fbturrets.blocks.TurretGun
 import mc.fbturrets.blocks.TurretHolder
 import mc.fbturrets.blocks.TurretHolderBlockEntity
 import mc.fbturrets.blocks.gui.TurretHolderGuiDescription
-import mc.fbturrets.item.GunItem
+import mc.fbturrets.items.GunItem
 import mc.fbturrets.util.MathHelp
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.`object`.builder.v1.block.FabricBlockSettings

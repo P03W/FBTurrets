@@ -1,4 +1,4 @@
-package mc.fbturrets.item
+package mc.fbturrets.items
 
 import mc.fbturrets.blocks.TurretGun
 import mc.fbturrets.blocks.TurretHolderBlockEntity
@@ -8,7 +8,6 @@ import net.minecraft.item.ItemUsageContext
 import net.minecraft.util.ActionResult
 import net.minecraft.util.Identifier
 import net.minecraft.util.registry.Registry
-import java.util.*
 
 class GunItem(private val ID: Identifier, settings: Settings?) : Item(settings) {
     override fun useOnBlock(context: ItemUsageContext): ActionResult {
@@ -26,5 +25,4 @@ class GunItem(private val ID: Identifier, settings: Settings?) : Item(settings) 
         }
         return ActionResult.CONSUME
     }
-
 }
